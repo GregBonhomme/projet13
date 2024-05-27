@@ -9,10 +9,18 @@ let state = {
 }
 
 const reducer = (currentState, action) => {
-
+    switch (action.type) {
+        case "getFirstname": {
+            const newFirstname = action.payload
+            return {...currentState, firstname: newFirstname}
+        }
+    
+        default:
+            return currentState;
+    }
 }
 
 export const store = configureStore({
-    preloadedState: StaticRange,
+    preloadedState: state,
     reducer
 })
