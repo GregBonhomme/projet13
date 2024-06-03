@@ -13,14 +13,12 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <Router>
-        <body>
           <Header />
           <Routes>
             <Route path="/" element={ <Home />}/>
             <Route path="/sign-in" element={ <Login /> } />
           </Routes>
           <Footer />
-        </body>
       </Router>
     </Provider>
   </React.StrictMode>

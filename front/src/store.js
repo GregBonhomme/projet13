@@ -10,9 +10,17 @@ let state = {
 
 const reducer = (currentState, action) => {
     switch (action.type) {
-        case "getFirstname": {
-            const newFirstname = action.payload
-            return {...currentState, firstname: newFirstname}
+        case "setFirstname": {
+            const user = {...currentState.user,firstname: action.payload}
+            return {...currentState, user}
+        }
+        case "setLastname": {
+            const user = {...currentState.user,lastname: action.payload}
+            return {...currentState, user}
+        }
+        case "setToken": {
+            const newToken = action.payload
+            return {...currentState,token: newToken}
         }
     
         default:

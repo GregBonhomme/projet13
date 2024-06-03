@@ -1,48 +1,64 @@
 import "../../style/pages/home.css"
-import chatIcon from "../../assets/img/icon-chat.png"
-import moneyIcon from "../../assets/img/icon-money.png"
-import securityIcon from "../../assets/img/icon-security.png"
-
+import { useStore } from "react-redux"
+import DefaultHomePage from "../DefaultHomePage"
 
 function Home () {
-    return (
-        <main>
-            <div className="hero">
-                <section className="hero-content">
-                    <h2 className="sr-only">Promoted Content</h2>
-                    <p className="subtitle">No fees.</p>
-                    <p className="subtitle">No minimum deposit.</p>
-                    <p className="subtitle">High interest rates.</p>
-                    <p className="text">Open a savings account with Argent Bank today!</p>
+    const user = JSON.parse(localStorage.getItem("user"))
+    const sessionUser = JSON.parse(sessionStorage.getItem("user"))
+    const store = useStore()
+    console.log(sessionUser)
+
+    if (sessionUser) {
+        let userData = []
+        user ? (userData = user) : (userData = sessionUser)
+        console.log(userData.firstName)
+        store.dispatch({type:"setFirstname", payload: userData.firstName})
+        store.dispatch({type:"setLastname", payload: userData.lastName})
+        console.log(store.getState())
+
+        return (
+            <main className="main bg-dark">
+                <div className="header">
+                    <h1>Welcome back<br />{userData.firstName} {userData.lastName} !</h1>
+                    <button className="edit-button">Edit Name</button>
+                </div>
+                <h2 className="sr-only">Accounts</h2>
+                <section className="account">
+                    <div className="account-content-wrapper">
+                        <h3 className="account-title">Argent Bank Checking (x8349)</h3>
+                        <p className="account-amount">$2,082.79</p>
+                        <p className="account-amount-description">Available Balance</p>
+                    </div>
+                    <div className="account-content-wrapper cta">
+                        <button className="transaction-button">View transactions</button>
+                    </div>
                 </section>
-            </div>
-            <section className="features">
-                <h2 className="sr-only">Features</h2>
-                <div className="feature-item">
-                    <img src={chatIcon} alt="Chat Icon" className="feature-icon" />
-                    <h3 className="feature-item-title">You are our #1 priority</h3>
-                    <p>
-                        Need to talk to a representative? You can get in touch through our
-                        24/7 chat or through a phone call in less than 5 minutes.
-                    </p>
-                </div>
-                <div className="feature-item">
-                    <img src={moneyIcon} alt="Chat Icon" className="feature-icon" />
-                    <h3 className="feature-item-title">More savings means higher rates</h3>
-                    <p>
-                        The more you save with us, the higher your interest rate will be!
-                    </p>
-                </div>
-                <div className="feature-item">
-                    <img src={securityIcon} alt="Chat Icon" className="feature-icon" />
-                    <h3 className="feature-item-title">Security you can trust</h3>
-                    <p>
-                        We use top of the line encryption to make sure your data and money
-                        is always safe.
-                    </p>
-                </div>
-            </section>
-        </main>
+                <section className="account">
+                    <div className="account-content-wrapper">
+                        <h3 className="account-title">Argent Bank Savings (x6712)</h3>
+                        <p className="account-amount">$10,928.42</p>
+                        <p className="account-amount-description">Available Balance</p>
+                    </div>
+                    <div className="account-content-wrapper cta">
+                        <button className="transaction-button">View transactions</button>
+                    </div>
+                </section>
+                <section className="account">
+                    <div className="account-content-wrapper">
+                        <h3 className="account-title">Argent Bank Credit Card (x8349)</h3>
+                        <p className="account-amount">$184.30</p>
+                        <p className="account-amount-description">Current Balance</p>
+                    </div>
+                    <div className="account-content-wrapper cta">
+                        <button className="transaction-button">View transactions</button>
+                    </div>
+                </section>
+    </main>
+        )
+    } else {console.log("No user identified")}
+
+    return (
+        <DefaultHomePage/>
     )
 }
 
