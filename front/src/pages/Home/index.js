@@ -1,25 +1,33 @@
 import "../../style/pages/home.css"
 import { useStore } from "react-redux"
+import { useState,useEffect } from "react"
 import DefaultHomePage from "../DefaultHomePage"
 
 function Home () {
     const user = JSON.parse(localStorage.getItem("user"))
     const sessionUser = JSON.parse(sessionStorage.getItem("user"))
     const store = useStore()
-    console.log(sessionUser)
+    const [logged,setLogged] = useState(store.getState().logged)
 
-    if (sessionUser) {
+    useEffect(() => {
+        store.subscribe(()=> {
+            setLogged(store.getState().logged)
+        })
+    },[store])
+
+    if (logged === true) {
         let userData = []
         user ? (userData = user) : (userData = sessionUser)
-        console.log(userData.firstName)
         store.dispatch({type:"setFirstname", payload: userData.firstName})
         store.dispatch({type:"setLastname", payload: userData.lastName})
-        console.log(store.getState())
+
+        const userFirstname = store.getState().user.firstname
+        const userLastname = store.getState().user.lastname
 
         return (
             <main className="main bg-dark">
                 <div className="header">
-                    <h1>Welcome back<br />{userData.firstName} {userData.lastName} !</h1>
+                    <h1>Welcome back<br />{userFirstname} {userLastname} !</h1>
                     <button className="edit-button">Edit Name</button>
                 </div>
                 <h2 className="sr-only">Accounts</h2>
@@ -53,13 +61,13 @@ function Home () {
                         <button className="transaction-button">View transactions</button>
                     </div>
                 </section>
-    </main>
+            </main>
         )
-    } else {console.log("No user identified")}
-
-    return (
-        <DefaultHomePage/>
-    )
+    } else {
+        console.log("No user identified")}
+        return (
+            <DefaultHomePage/>
+        )
 }
 
 export default Home

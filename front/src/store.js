@@ -5,7 +5,7 @@ let state = {
         firstname:"",
         lastname:""
     },
-    token : ""
+    logged : false
 }
 
 const reducer = (currentState, action) => {
@@ -18,9 +18,12 @@ const reducer = (currentState, action) => {
             const user = {...currentState.user,lastname: action.payload}
             return {...currentState, user}
         }
-        case "setToken": {
-            const newToken = action.payload
-            return {...currentState,token: newToken}
+        case "loggedOn": {
+            return {...currentState,logged: true}
+        }
+
+        case "loggedOff": {
+            return {...currentState,logged: false}
         }
     
         default:

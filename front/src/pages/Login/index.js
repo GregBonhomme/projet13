@@ -1,6 +1,7 @@
 import "../../style/pages/login.css"
 import { useRef } from "react"
 import { useNavigate } from "react-router-dom"
+import { useStore } from "react-redux"
 
 function Login () {
 
@@ -8,6 +9,7 @@ function Login () {
     const passwordRef = useRef()
     const rememberRef = useRef()
     const navigate = useNavigate()
+    const store = useStore()
 
     const handleSubmit = async (e) => {
         
@@ -15,9 +17,6 @@ function Login () {
         let emailData = emailRef.current.value
         let passwordData = passwordRef.current.value
         let rememberCheck = rememberRef.current.checked
-        console.log(emailData)
-        console.log(passwordData)
-        console.log(rememberCheck)
 
         try {
             const loginResponse = await fetch("http://localhost:3001/api/v1/user/login", {
@@ -33,7 +32,6 @@ function Login () {
             if (loginResponse.status === 200) {
                 const loginData = await loginResponse.json()
                 const token = loginData.body.token
-                console.log(token)
 
                 const profileResponse = await fetch("http://localhost:3001/api/v1/user/profile",{
                     method:"POST",
@@ -48,14 +46,12 @@ function Login () {
                     localStorage.removeItem("user")
                     sessionStorage.removeItem("user")
                     localStorage.setItem("user",JSON.stringify(userData))
-                    const data = localStorage.getItem("user")
-                        console.log(data)
+                    store.dispatch({type:"loggedOn"})
                 } else {
                     localStorage.removeItem("user")
                     sessionStorage.removeItem("user")
                     sessionStorage.setItem("user",JSON.stringify(userData))
-                    const data = JSON.parse(sessionStorage.getItem("user"))
-                        console.log(data.firstName)
+                    store.dispatch({type:"loggedOn"})
                 }
             navigate("/")
             } else {
