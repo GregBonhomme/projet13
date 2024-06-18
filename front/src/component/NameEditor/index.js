@@ -55,11 +55,11 @@ function NameEditor () {
     if (editMode === true) {
         return (
             <form className="nameEditor" onSubmit={handleSubmit}>
-                <div>
+                <div className="editor_inputs">
                     <input type="text" name="firstname" value={firstname} onChange={e => setFirstName(e.target.value)} placeholder={savedFirstname}></input>
                     <input type="text" name="lastname" value={lastname} onChange={e => setLastName(e.target.value)} placeholder={savedLastname}></input>
                 </div>
-                <div>
+                <div className="editor_btns">
                     <button type="submit">Save</button>
                     <button type="button" onClick={toggleMode}>Cancel</button>
                 </div>
