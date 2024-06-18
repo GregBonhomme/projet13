@@ -1,15 +1,15 @@
 import "../../style/pages/login.css"
 import { useRef } from "react"
-import { useNavigate } from "react-router-dom"
 import { useStore } from "react-redux"
+import { useNavigate } from "react-router-dom"
 
 function Login () {
 
     const emailRef = useRef()
     const passwordRef = useRef()
     const rememberRef = useRef()
-    const navigate = useNavigate()
     const store = useStore()
+    const navigate = useNavigate()
 
     const handleSubmit = async (e) => {
         
@@ -32,28 +32,11 @@ function Login () {
             if (loginResponse.status === 200) {
                 const loginData = await loginResponse.json()
                 const token = loginData.body.token
-
-                const profileResponse = await fetch("http://localhost:3001/api/v1/user/profile",{
-                    method:"POST",
-                    headers:{"content-type":"application/json; charset=utf-8",
-                            "Authorization":"Bearer " + token
-                    }
-                })
-            
-            const profileData = await profileResponse.json()
-            const userData = profileData.body
+                store.dispatch({type:"setToken",payload:token})
                 if (rememberCheck === true) {
-                    localStorage.removeItem("user")
-                    sessionStorage.removeItem("user")
-                    localStorage.setItem("user",JSON.stringify(userData))
-                    store.dispatch({type:"loggedOn"})
-                } else {
-                    localStorage.removeItem("user")
-                    sessionStorage.removeItem("user")
-                    sessionStorage.setItem("user",JSON.stringify(userData))
-                    store.dispatch({type:"loggedOn"})
+                    localStorage.setItem("token", token)
                 }
-            navigate("/")
+                navigate("/user")
             } else {
                 console.error("Login failed with status : ",loginResponse.status)
             }
